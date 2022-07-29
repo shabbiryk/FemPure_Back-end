@@ -121,6 +121,10 @@ mapping(uint256 => address) private orderIDtoPartnerID;
         emit NewPartnerRegistered();
     }
 
+    function isRegisteredPartner() external view returns(bool) {
+        return partnerIDtoPartner[msg.sender].pinCodes.length > 0;
+    }
+
     function registerUser(string memory _pincode, string memory _residenceAddress) external notPaused {
         require(StringCompare(userIDtoUser[msg.sender].pinCode, ""), "Already a Registered User");
         require(!StringCompare(_pincode,""), "pincode not provided");
@@ -128,6 +132,14 @@ mapping(uint256 => address) private orderIDtoPartnerID;
 
         userIDtoUser[msg.sender] = User(_pincode, _residenceAddress);
         registeredUsers.push(msg.sender);
+    }
+
+    function isRegisteredUser() external view returns(bool) {
+        return !StringCompare(userIDtoUser[msg.sender].pinCode, "");
+    }
+
+    function getUserPincode() external OnlyUser view returns(string memory) {
+        return userIDtoUser[msg.sender].pinCode;
     }
 
     function addNewProduct(string memory productName, string memory productDescription, uint256 productPriceInWei) external onlyOwner {
