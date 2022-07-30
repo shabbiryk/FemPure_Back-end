@@ -4,8 +4,10 @@
   margin: auto;
   text-align: center;
   font-family: arial;
-  margin: 20px;
-  padding: 10px;
+  margin: 30px auto 20px 30px ;
+  padding:10px;
+  align-items: center;
+  position: relative;
 }
 
 .price {
@@ -18,15 +20,17 @@
   outline: 0;
   padding: 12px;
   color: white;
-  background-color: #000;
+  background-color:#f29183;
   text-align: center;
   cursor: pointer;
   width: 100%;
   font-size: 18px;
+  border-radius: 8px;
+
 }
 
 .card button:hover {
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .card__qty {

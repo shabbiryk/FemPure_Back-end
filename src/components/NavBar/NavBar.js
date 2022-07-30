@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaShoppingBasket, FaShoppingBag } from 'react-icons/fa';
+import {  AiOutlineShoppingCart } from 'react-icons/ai';
+import { GiCircle } from "react-icons/gi"
 import {
 	connectWallet,
 	checkIfWalletIsConnected,
@@ -46,12 +47,17 @@ function NavBar(props) {
         <div className="header">
 			<img src="./FemPureLogo.png" height={100} width={100} style={{float:"left", marginBottom:10}}/>
             {!props.currentAccount && 
-				<button onClick={() => SignIn()}>Sign In</button>
+				<button className="signIn" onClick={() => SignIn()}>Sign In</button>
 			} 
 			{props.currentAccount && 
 				(<div style={{float:"right", paddingRight:10}}>
-					<FaShoppingBag size={45}/>
-					<button style={{fontSize:30}} onClick={() => signOut()}>Sign Out</button>
+				  <div className="GiCircle">
+				  <GiCircle  size={35}/>
+				  </div>
+					<div className="Fabag">
+					<AiOutlineShoppingCart size={45}/>
+					</div>
+					<button className="signOut" onClick={() => signOut()}>Sign Out</button>
 				</div>)
 			}
         </div>

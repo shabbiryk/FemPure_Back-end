@@ -1,9 +1,67 @@
 .header {
   padding: 10px;
   text-align: center;
-  background: #1abc9c;
+  background: #f6d3d3;
   color: white;
   font-size: 30px;
   height: 100px;
   width: 100%;
 }
+
+
+.header button {
+  margin-top: 65px;
+  position: absolute;
+  right: 20px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background-color: azure;
+  color:rgb(53, 51, 51) ;
+  
+}
+
+.header button:hover {
+  text-decoration: underline;
+ text-shadow: grey;
+ opacity: 0.8;
+}
+
+.Fabag {
+  position: relative;
+  right: 140px;
+  top: 15px;
+  cursor: pointer;
+
+}
+
+.signIn {
+  font-size: 20px;
+  text-align: center;
+  width: 100px;
+  height: 40px;
+  position: relative;
+  top: 1px;
+
+}
+
+
+
+.signOut {
+  font-size: 20px;
+  text-align: center;
+  width: 100px;
+  height: 40px;
+  position: relative;
+  top: 1px;
+}
+
+.GiCircle {
+  position: relative;
+  right: 115px;
+  top: 35px;
+  color: white;
+  border-radius: 100%;
+  background-origin: inherit;
+}
+

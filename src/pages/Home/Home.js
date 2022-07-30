@@ -41,7 +41,8 @@ function Home ()  {
     }
     return (<>
     {/* content */}
-    <div style={{display: "flex", flexDirection:"row", flexFlow:"wrap"}}>
+    <div className="Home" style={{display: "flex", flexDirection:"row", flexFlow:"wrap"}}>
+
         <ProductCard id="1" addToCart={addToCart} inCart={true}/>
         <ProductCard id="2" addToCart={addToCart} inCart={false}/>
         <ProductCard />
