@@ -39,7 +39,6 @@ function NavBar(props) {
 
 	function SignIn(){
 		connectWallet(props.setCurrentAccount)
-		registerUser(address, contractABI)
 		isRegisteredUser(address, contractABI)
 	}
     return (
