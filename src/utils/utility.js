@@ -113,7 +113,7 @@ export async function registerUser(contractAddr, artifact, pincode, residenceAdd
           let obj = response.json()
           const name = obj.name
           const priceInWei = obj.attributes[0].value
-          image_link = obj.image[0]
+          let image_link = obj.image[0]
           hashcode = image_link.split("ipfs://")[1]
           web2metadatalink = "https://ipfs.io/ipfs/" + hashcode
           response = await fetch(web2metadatalink)
