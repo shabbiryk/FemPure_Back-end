@@ -98,6 +98,37 @@ export async function registerUser(contractAddr, artifact, pincode, residenceAdd
     }
   }
 
+  export async function getAvailableProductsDetailsFromLocation(contractAddr, artifact, pincode) {
+
+      try {
+        let productIDs = await getAvailableProductsInLocation(contractAddr, artifact, pincode);
+        let names = []
+        let images = []
+        let prices = []
+        for (var i=0; i<productIDs.length; i++){
+          let ipfs_uri = await productMetadataURI(contractAddr, artifact, productIDs[i])
+          let hashcode = ipfs_uri.split("ipfs://")[1]
+          let web2metadatalink = "https://ipfs.io/ipfs/" + hashcode
+          let response = await fetch(web2metadatalink)
+          let obj = response.json()
+          const name = obj.name
+          const priceInWei = obj.attributes[0].value
+          image_link = obj.image[0]
+          hashcode = image_link.split("ipfs://")[1]
+          web2metadatalink = "https://ipfs.io/ipfs/" + hashcode
+          response = await fetch(web2metadatalink)
+          names.push(name)
+          prices.push(priceInWei)
+          images.push(response)
+          
+        }
+        return (names, prices, images)
+      } catch (err) {
+        console.log("error")
+    }
+    }
+
+
   export async function getAvailableLocations(contractAddr, artifact) {
     if (typeof window.ethereum != undefined) {
       await requestAccount();
