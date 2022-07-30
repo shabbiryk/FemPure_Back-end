@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { FaShoppingBasket, FaShoppingBag } from 'react-icons/fa';
 import {
 	connectWallet,
 	checkIfWalletIsConnected,
 	getSignedContract,
 	updateProviderAndContract,
 } from "../../utils/common.js";
-
+import {registerUser, isRegisteredUser} from "../../utils/utility"
 import './NavBar.css'
-
+import FemPure from "../../abis/FemPure.json";
+import FemPureContract from "../../abis/contract-address.json";
 
 function NavBar(props) {
     
@@ -16,12 +18,13 @@ function NavBar(props) {
 	const [provider, setProvider] = useState(null);
 	const [contract, setContract] = useState(null);
 
-	// const address = addressJson.address;
-	// const contractABI = abiJson.abi;
+	const address = FemPureContract.FemPureContractAddr;
+	const contractABI = FemPure.abi;
+
 
 	useEffect(() => {
 		checkIfWalletIsConnected(props.setCurrentAccount);
-		// updateProviderAndContract(address, contractABI, setProvider, setContract);
+		updateProviderAndContract(address, contractABI, setProvider, setContract);
 	}, []);
 
 	// useEffect(() => {
@@ -34,13 +37,22 @@ function NavBar(props) {
 		localStorage.removeItem("currentAccount")
 	}
 
+	function SignIn(){
+		connectWallet(props.setCurrentAccount)
+		registerUser(address, contractABI)
+		isRegisteredUser(address, contractABI)
+	}
     return (
         <div className="header">
+			<img src="./FemPureLogo.png" height={100} width={100} style={{float:"left", marginBottom:10}}/>
             {!props.currentAccount && 
-				<button onClick={() => connectWallet(props.setCurrentAccount)}>Sign In</button>
+				<button onClick={() => SignIn()}>Sign In</button>
 			} 
 			{props.currentAccount && 
-				<button onClick={() => signOut()}>Sign Out</button>
+				(<div style={{float:"right", paddingRight:10}}>
+					<FaShoppingBag size={45}/>
+					<button style={{fontSize:30}} onClick={() => signOut()}>Sign Out</button>
+				</div>)
 			}
         </div>
     )

@@ -11,12 +11,14 @@ function App() {
 	return ( 
 	<>
 	<NavBar currentAccount={currentAccount} setCurrentAccount={setCurrentAccount}/>
+	<div style={{padding:18}}>
 		<Router>
 			<Routes>
 				<Route path="/" element={<Home />}>
 				</Route>
 			</Routes>
 		</Router>
+	</div>
 	</>
 	);
 }
