@@ -27,7 +27,8 @@ export async function registerUser(contractAddr, artifact) {
       try {
         let transaction = await fempureContract.isRegisteredUser();
         // let receipt = await transaction.wait();
-        console.log(transaction);
+        // console.log(transaction);
+        return transaction
       } catch (err) {
         console.log("error", err)
     }

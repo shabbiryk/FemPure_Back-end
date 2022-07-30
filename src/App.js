@@ -4,6 +4,7 @@ import { Route, Routes, Redirect, BrowserRouter as Router } from "react-router-d
 import "./App.css";
 import Home from './pages/Home/Home'
  import NavBar from './components/NavBar/NavBar'
+import Cart from "./pages/Cart/Cart";
 
 function App() {
 	const [currentAccount, setCurrentAccount] = useState(localStorage.getItem("currentAccount"));
@@ -15,6 +16,8 @@ function App() {
 		<Router>
 			<Routes>
 				<Route path="/" element={<Home />}>
+				</Route>
+				<Route path="/cart" element={<Cart />}>
 				</Route>
 			</Routes>
 		</Router>
