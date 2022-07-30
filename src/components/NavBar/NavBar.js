@@ -12,6 +12,7 @@ import FemPure from "../../abis/FemPure.json";
 import FemPureContract from "../../abis/contract-address.json";
 
 function NavBar(props) {
+	const [showModal, setShowModal] = useState(true)
     
 	const [contractOwner, setContractOwner] = useState("");
 	// const [currentAccount, setCurrentAccount] = useState(localStorage.getItem("currentAccount"));
@@ -39,7 +40,6 @@ function NavBar(props) {
 
 	function SignIn(){
 		connectWallet(props.setCurrentAccount)
-		registerUser(address, contractABI)
 		isRegisteredUser(address, contractABI)
 	}
     return (
@@ -54,7 +54,25 @@ function NavBar(props) {
 					<button style={{fontSize:30}} onClick={() => signOut()}>Sign Out</button>
 				</div>)
 			}
+			{showModal? <div className="overlay">
+				<div className="mod">
+					<div className="title">
+						Hello
+					</div>
+					<div className="user__info">
+						<label>Pincode
+
+						<input type="text"></input>
+						</label>
+						<label>Address
+						<input type="text"></input>
+						</label>
+					</div>
+					<button className="button">Sign Up</button>
+				</div>
+			</div> : <></>}
         </div>
+		
     )
 }
 export default NavBar;
