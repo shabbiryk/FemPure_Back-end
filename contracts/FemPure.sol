@@ -285,9 +285,8 @@ mapping(uint256 => address) private orderIDtoPartnerID;
     }
 
     function approvePartner(address partner) external onlyOwner {
-        Partner memory _partner = partnerIDtoPartner[partner];
-        require(_partner.pinCodes.length > 0, "Not a Registered Partner");
-        require(!_partner.approved, "Already Approved Partner");
+        require(partnerIDtoPartner[partner].pinCodes.length > 0, "Not a Registered Partner");
+        require(!partnerIDtoPartner[partner].approved, "Already Approved Partner");
 
         partnerIDtoPartner[partner].approved = true;
     }
@@ -318,32 +317,29 @@ mapping(uint256 => address) private orderIDtoPartnerID;
     }
 
     function markOrderDelivered() external OnlyApprovedPartner notPaused {
-        Partner memory partner = partnerIDtoPartner[msg.sender];
-        require(partner.InTransit, "Not Active Orders");
-        orderIDtoOrderData[partner.lastOrderID].orderDeliveredByPartner = true;
+        require(partnerIDtoPartner[msg.sender].InTransit, "Not Active Orders");
+        orderIDtoOrderData[partnerIDtoPartner[msg.sender].lastOrderID].orderDeliveredByPartner = true;
         partnerIDtoPartner[msg.sender].InTransit = false;
 
-        emit OrderDeliveredByPartner(orderIDtoUserID[partner.lastOrderID], partner.lastOrderID);
+        emit OrderDeliveredByPartner(orderIDtoUserID[partnerIDtoPartner[msg.sender].lastOrderID], partnerIDtoPartner[msg.sender].lastOrderID);
     }
 
     function verifyOrderDelivery(uint256 _orderId, uint256 _otp) external OnlyUser notPaused {
         require(orderIDtoUserID[_orderId] == msg.sender, "This is not your order");
-        OrderData memory order = orderIDtoOrderData[_orderId];
-        require(order.orderDeliveredByPartner && (!order.orderReceivedByUser) && (!order.orderCancelled), "Order is not delivered or has Already been received or has been cancelled");
-        require(order.otp == _otp, "OTP does not match");
+        require(orderIDtoOrderData[_orderId].orderDeliveredByPartner && (!orderIDtoOrderData[_orderId].orderReceivedByUser) && (!orderIDtoOrderData[_orderId].orderCancelled), "Order is not delivered or has Already been received or has been cancelled");
+        require(orderIDtoOrderData[_orderId].otp == _otp, "OTP does not match");
         orderIDtoOrderData[_orderId].orderReceivedByUser = true;
 
     }
 
     function cancelOrderAndRefund(uint256 _orderId) external OnlyUser notPaused {
         require(orderIDtoUserID[_orderId] == msg.sender, "This is not your order");
-        OrderData memory order = orderIDtoOrderData[_orderId];
-        require((!order.orderDeliveredByPartner) && (!order.orderCancelled), "Order has been delivered or already cancelled");
+        require((!orderIDtoOrderData[_orderId].orderDeliveredByPartner) && (!orderIDtoOrderData[_orderId].orderCancelled), "Order has been delivered or already cancelled");
         orderIDtoOrderData[_orderId].orderCancelled = true;
         partnerIDtoPartner[orderIDtoPartnerID[_orderId]].InTransit = false;
         address payable user = payable(msg.sender);
-        uint256 _totalCost = this.calculateOrderCost(order.productIDs, order.supplyMap);
-        if (order.partnerAssigned) {
+        uint256 _totalCost = this.calculateOrderCost(orderIDtoOrderData[_orderId].productIDs, orderIDtoOrderData[_orderId].supplyMap);
+        if (orderIDtoOrderData[_orderId].partnerAssigned) {
         uint256 _logisticsCost = logisticsCost;
             if (_totalCost - _logisticsCost > 0) {
             (bool success, bytes memory returnData) =user.call{
