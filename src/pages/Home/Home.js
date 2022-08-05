@@ -7,7 +7,7 @@ import {
 	getSignedContract,
 	updateProviderAndContract,
 } from "../../utils/common.js";
-import {registerUser, isRegisteredUser, getAvailableProductsDetailsFromLocation} from "../../utils/utility";
+import {registerUser, isRegisteredUser, getProductDataFromIPFS, getAvailableLocations} from "../../utils/utility";
 import FemPure from "../../abis/FemPure.json";
 import FemPureContract from "../../abis/contract-address.json";
 function Home ()  {
@@ -15,7 +15,10 @@ function Home ()  {
 	const contractABI = FemPure.abi;
     useEffect(() => {
 
-        getAvailableProductsDetailsFromLocation(address, contractABI, "313001").then((res) => {console.log("Product Details",res)})
+        getAvailableLocations(address, contractABI).then((res) => {console.log("Available Locations" + res)})
+        getProductDataFromIPFS("ipfs://bafybeibrbgx34glejbmk2cee7bqrd5wb77kwad4wwdg4sqhqbzu7ve5cdy/0").then((res) => {console.log("productObj" + res.image, res.name, res.price)})
+
+        
     }, [])
 
 

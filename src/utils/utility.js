@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
-import { requestAccount, getSignedContract } from "./common";
+import ProductCard from "../components/ProductCard/ProductCard";
+import { requestAccount, getSignedContract, getReadContract } from "./common";
 
 // SmartContract function calls
 
@@ -70,7 +71,7 @@ export async function registerUser(contractAddr, artifact, pincode, residenceAdd
     if (typeof window.ethereum != undefined) {
       await requestAccount();
   
-      const fempureContract = getSignedContract(contractAddr, artifact);
+      const fempureContract = getReadContract(contractAddr, artifact);
       try {
         let ipfs_uri = await fempureContract.productMetadataURI(productID);
         // let receipt = await transaction.wait();
@@ -86,46 +87,39 @@ export async function registerUser(contractAddr, artifact, pincode, residenceAdd
     if (typeof window.ethereum != undefined) {
       await requestAccount();
   
-      const fempureContract = getSignedContract(contractAddr, artifact);
-      try {
+      const fempureContract = getReadContract(contractAddr, artifact);
+        console.log(pincode)
         let productIDs = await fempureContract.getAvailableProductsInLocation(pincode);
         // let receipt = await transaction.wait();
-        console.log(productIDs);
+        console.log("productIDs" + productIDs);
         return productIDs;
-      } catch (err) {
-        console.log("error")
-    }
+
     }
   }
 
-  export async function getAvailableProductsDetailsFromLocation(contractAddr, artifact, pincode) {
+  export async function getProductDataFromIPFS(ipfs_uri) {
 
-      try {
-        let productIDs = await getAvailableProductsInLocation(contractAddr, artifact, pincode);
-        let names = []
-        let images = []
-        let prices = []
-        for (var i=0; i<productIDs.length; i++){
-          let ipfs_uri = await productMetadataURI(contractAddr, artifact, productIDs[i])
           let hashcode = ipfs_uri.split("ipfs://")[1]
           let web2metadatalink = "https://ipfs.io/ipfs/" + hashcode
+          console.log("web2" + web2metadatalink)
           let response = await fetch(web2metadatalink)
-          let obj = response.json()
+          let obj = await response.json()
           const name = obj.name
           const priceInWei = obj.attributes[0].value
           let image_link = obj.image[0]
           hashcode = image_link.split("ipfs://")[1]
           web2metadatalink = "https://ipfs.io/ipfs/" + hashcode
           response = await fetch(web2metadatalink)
-          names.push(name)
-          prices.push(priceInWei)
-          images.push(response)
-          
-        }
-        return (names, prices, images)
-      } catch (err) {
-        console.log("error")
-    }
+          let imageblob = await response.blob()
+          var image = new Image();
+          image.src = URL.createObjectURL(imageblob);  
+          var object = {
+            name:  name,
+            image: image,
+            price: priceInWei
+          };
+          // Return it
+          return object;
     }
 
 
@@ -133,7 +127,7 @@ export async function registerUser(contractAddr, artifact, pincode, residenceAdd
     if (typeof window.ethereum != undefined) {
       await requestAccount();
   
-      const fempureContract = getSignedContract(contractAddr, artifact);
+      const fempureContract = getReadContract(contractAddr, artifact);
       try {
         let pincodes = await fempureContract.getAvailableLocations();
         // let receipt = await transaction.wait();

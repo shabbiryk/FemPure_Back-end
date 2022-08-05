@@ -12,7 +12,11 @@ function getContract(contractAddr, artifact) {
     return contract;
 }
 
+export const getReadContract = (address, contractABI) => {
 
+        const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com/");
+        return new ethers.Contract(address, contractABI, provider);
+}
 export const getSignedContract = (address, contractABI) => {
     const { ethereum } = window;
 
